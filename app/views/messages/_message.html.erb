@@ -1,0 +1,20 @@
+<div class = "message">
+  <div class="outgoing_msg">
+    <div class="sent_msg">
+      <% if message.image? %>
+        <%= image_tag(message.image_url, height: "120", width: "120") %>
+        <%= link_to "Download", message.image.url, download: message.image.url %>
+      <% end %>
+      <% unless message.content.blank? %>
+        <p data-msg-id = <%=message.id %>>
+          <b>
+            <%=message.user.name %> - <i><%= message.created_at.to_s(:short) %></i>
+          </b>
+          <br>
+          <%= message.content %>
+        </p>
+      <% end %>
+      <br>
+    </div>
+  </div>
+</div>

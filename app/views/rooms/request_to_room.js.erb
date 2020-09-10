@@ -1,0 +1,11 @@
+$(".req-<%=@room.id%>").removeClass("btn-info")
+                        .addClass("btn-warning")
+                        .html('Requested')
+
+if (Notification.permission === 'granted') {
+  var title = 'Notification'
+  var body = 'Sent request to <%= @room.user.name %>.'
+  var options = { body: body }
+  new Notification(title, options)
+}
+$('.list-req').prepend('<%= j(render "rooms/button_req", {request: @pms, room: @room}) %>');

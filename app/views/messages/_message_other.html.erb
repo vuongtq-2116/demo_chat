@@ -1,0 +1,21 @@
+<div class = "message">
+  <div class="incoming_msg">
+    <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+    <div class="received_msg">
+      <div class="received_withd_msg">
+        <%= image_tag(message.image_url, height: "120", width: "120") if message.image? %>
+        <% unless message.content.blank? %>
+        <p data-msg-id = <%=message.id %>>
+          <b>
+            <%= message.user.name %> - <i><%= message.created_at.to_s(:short) %></i>
+            <%# load_seen_at(message.user.id, message.room.id).seen_at < message.created_at ? "*" : "" %>
+          </b>
+          <br>
+          <%= message.content %>
+        </p>
+        <br>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

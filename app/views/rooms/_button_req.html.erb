@@ -1,0 +1,11 @@
+<% unless request.blank? %>
+  <li class = "list-rq data-pms-<%= request.id %>">
+    <div class="container">
+      <div class="row">
+        <b class = "name-user"><%=request.user.name%> &#8594;</b>
+        <%= link_to("Accept &#10003;".html_safe, access_user_to_room_path(user: request.user.id, room: room.id), remote: true, class: "btn btn-info", method: :post) if request.requesting? %>
+        <%= link_to("Kick &#10754;".html_safe, kick_out_of_room_path(user: request.user.id, room: room.id), remote: true, class: "btn btn-danger", method: :post) if request.approved?%>
+      </div>
+    </div>
+  </li>
+<%end%>

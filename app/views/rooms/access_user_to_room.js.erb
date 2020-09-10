@@ -1,0 +1,7 @@
+$('.data-pms-<%= @pms.id %>').remove();
+alert("Accepted for <%= @pms.user.name %>")
+$('#myModal').modal('hide');
+
+$('.list-req').prepend('<%= j(render "rooms/button_req", {request: @pms, room: @room}) %>');
+requests = $(".badge-green.data-<%= @room.id%>");
+requests.html(parseInt(requests.text()) - 1);

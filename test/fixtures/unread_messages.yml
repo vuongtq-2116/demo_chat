@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  room: one
+  seen_at: 2020-09-15 09:01:27
+
+two:
+  user: two
+  room: two
+  seen_at: 2020-09-15 09:01:27

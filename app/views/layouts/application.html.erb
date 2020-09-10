@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>DemoSocket</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+  </head>
+
+  <body>
+    <% if user_signed_in? %>
+      <%= link_to('Logout', destroy_user_session_path, method: :delete, class: "btn btn-danger btn-logout") %>
+      <%= link_to('Back to list rooms', rooms_path, class: "btn btn-warning btn-logout") %>
+      <span class = "btn btn-info btn-logout"><%= current_user.name%></span>
+      <%# render "notifications/list_notification"%>
+    <% end %>
+    <%= yield %>
+    <div class = "modal-request"></div>
+  </body>
+</html>

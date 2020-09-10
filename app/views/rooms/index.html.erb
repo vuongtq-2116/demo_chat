@@ -1,0 +1,28 @@
+<div class="container">
+  <h2>List Room</h2>
+  <div class="row">
+    <% @rooms.each do |room| %>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-header text-white bold">
+            <%= link_to "#{room.name}", room_path(room) %>
+            <% if Permission.find_by user: current_user, room: room, status: :requesting %>
+              <p class = "btn btn-warning req-<%=room.id%>">Requested</p>
+            <% elsif Permission.find_by user: current_user, room: room, status: :approved %>
+            <span class="badge-red data-<%=room.id%>"><%= count_unread_message(room)%></span>
+            <% if room.user == current_user%>
+              <span class="badge-green data-<%=room.id%>"><%= count_request(room)%></span>
+            <%end%>
+            <p class = "approved"></p>
+            <% else %>
+              <%= link_to "Request", request_to_room_path(user: current_user, room: room), class: "btn btn-info req-#{room.id}", remote: true %>
+            <% end %>
+          </div>
+          <div class="card-footer bg-secondary text-white"><%= room.user.name %></div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= link_to "Create room", new_room_path, class: "btn btn-success" %>

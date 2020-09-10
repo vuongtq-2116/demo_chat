@@ -1,0 +1,105 @@
+<h1><%= @room.name %></h1>
+
+<div class="messaging">
+  <div class="inbox_msg">
+    <div class="mesgs">
+			<div class="msg_history" id="messages"
+				current_user = <%= current_user.id %>
+				room_id = <%= @room.id %>>
+				<%= render "list_messages", messages: @messages%>
+      </div>
+			<div id = "typing-on"></div>
+			<div class="type_msg">
+				<div class="input_msg_write">
+					<input id="user_id" name="user_id" type="hidden" value=<%= current_user.id %> />
+					<%= form_for Message.new, url: messages_path, html:{ class: "form-horizontal" }, remote: true do |f| %>
+						<%= f.file_field :image %>
+						<%= f.text_field :content, "data-behavior" => "room_speaker", class: "write_msg form-control", placeholder: "Type a message" %>
+						<%= f.hidden_field :room_id, value: @room.id %>
+						<%= f.button type: :submit, class: "msg_send_btn", id: "submit-msg" do %>
+						<i class='fa fa-paper-plane' aria-hidden='true'></i>
+						<%end%>
+					<% end %>
+					<!-- <label for="file"></label><br />
+					<img id="preview" width="50" height="50"/> -->
+				</div>
+			</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+<ul class = "list-req">
+	<%@requests.each do |request| %>
+		<%=render "rooms/button_req", {request: request, room: @room} %>
+	<%end%>
+</ul>
+</div>
+
+<script>
+	$("#messages").animate({scrollTop:0},500);
+
+	$("input[type=file]").on("change", function() {
+		$("#preview").attr("src", URL.createObjectURL(this.files[0]));
+	});
+
+	$(function(){
+		var yd=$('#messages');
+		var lastScrollTop=Infinity;
+		yd.scrollTop(yd.prop("scrollHeight") - yd.prop("clientHeight")).on('wheel',wheel);
+
+		function loadMoreOnTop(){
+			var msg_ids = $('p').map(function () {
+				return $(this).attr("data-msg-id");
+			});
+
+			var min_id = Math.min.apply(Math, msg_ids);
+
+			$.ajax({
+				url: '<%=load_more_path%>',
+				type: "GET",
+				data: {"id_msg" : min_id, "room_id" : yd.attr("room_id")},
+				success: function(response) {
+				}
+			});
+		};
+
+		function loadMoreOnBottom(){
+			var msg_ids = $('p').map(function () {
+				return $(this).attr("data-msg-id");
+			});
+			var max_id = Math.max.apply(Math, msg_ids);
+			// console.log(max_id);
+			$.ajax({
+				url: '<%=load_more_unread_path%>',
+				type: "GET",
+				data: {"id_msg" : max_id, "room_id" : yd.attr("room_id")},
+				success: function(response) {
+				}
+			});
+		};
+		var bot = 0;
+
+		function wheel(){
+			var st=$(this).scrollTop();
+				if (st<=lastScrollTop && st<300){
+					getMore();
+				} else {
+					bot++;
+					if(bot == 1 || bot%12 == 0) loadMoreOnBottom();
+				}
+				lastScrollTop=st;
+		};
+
+		function getMore(){
+			loadMoreOnTop();
+
+			var lastHeight=yd.prop("scrollHeight");
+			yd.scrollTop(yd.prop("scrollHeight")-lastHeight+4);
+			yd.off("wheel",wheel);
+			setTimeout(function(){
+					yd.on('wheel',wheel);
+			},300);
+		};
+	});
+</script>
